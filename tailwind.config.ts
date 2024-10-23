@@ -12,6 +12,20 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      textColor: {
+        base: "var(--text-base)",
+        secondary: "var(--text-secondary)"
+      },
+      backgroundColor: {
+        'btn-primary': "var(--button-primary)",
+        'btn-secondary': "var(--button-secondary)",
+        'btn-hover': "var(--button-hover)",
+        'btn-accent': "var(--button-accent)"
+      },
+      borderColor: {
+        primary: "var(--border-primary)",
+        secondary: "var(--border-secondary)",
+      },
     },
   },
   plugins: [],

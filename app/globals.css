@@ -3,8 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #23365c;
+  --foreground: #ffffff;
+  --text-base: #ffffff;
+  --text-secondary: #23365c;
+  --button-primary: #ffffff;
+  --button-secondary: #23365c;
+  --button-hover: #ffffff;
+  --button-accent: #fc6e24;
+  --border-primary: #ffffff;
+  --border-secondary: #23365c;
 }
 
 @media (prefers-color-scheme: dark) {
