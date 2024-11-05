@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #23365c;
+  --background: #26355c;
   --foreground: #ffffff;
   --text-base: #ffffff;
   --text-secondary: #23365c;
@@ -13,23 +13,4 @@
   --button-accent: #fc6e24;
   --border-primary: #ffffff;
   --border-secondary: #23365c;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }
