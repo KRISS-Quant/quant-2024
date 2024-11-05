@@ -5,7 +5,6 @@ import { SelectCustom } from "@/components/ui/select-custom";
 import { Button } from "./ui/button";
 import { DateTimePickerCustom } from "./ui/date-time-picker-custom";
 import { z } from "zod";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const algorithms = ["SMA Golden Cross Strategy", "RSI Strategy"]; //Initial Strategies
@@ -15,14 +14,14 @@ const intervals = ["1m", "5m", "15m", "30m", "1h", "4h", "1d"];
 
 // Validation schema for SMA parameters
 const SMAParamsSchema = z.object({
-  longer: z.number().min(11).max(199),
-  shorter: z.number().min(11).max(199),
+  longer: z.number().min(10).max(200),
+  shorter: z.number().min(10).max(200),
 });
 
 // Validation schema for RSI parameters
 const RSIParamsSchema = z.object({
-  lowThreshold: z.number().min(11).max(39),
-  highThreshold: z.number().min(61).max(89),
+  lowThreshold: z.number().min(10).max(40),
+  highThreshold: z.number().min(60).max(90),
 });
 
 // Define the props type
@@ -39,6 +38,7 @@ export function ParameterSelectionComponent({
     lowThreshold: 30,
     highThreshold: 70,
   });
+  const router = useRouter();
 
   // Handle the algorithm change to render different parameter selection options
   const handleAlgorithmChange = (algorithm: SetStateAction<string>) => {
@@ -85,6 +85,9 @@ export function ParameterSelectionComponent({
       "h-7 p-4 justify-center bg-transparent border rounded-md border-primary";
   }
 
+  const handleStartBacktesting = () => {
+    router.push(`/candlestick?algorithm=${encodeURIComponent(selectedAlgorithm)}`);
+  };
   return (
     <div className="flex flex-col items-center justify-center space-y-4 w-[80%] mx-auto">
       <SelectCustom
@@ -107,26 +110,26 @@ export function ParameterSelectionComponent({
       />
       {selectedAlgorithm === "SMA Golden Cross Strategy" && (
         <div>
-          <div className="text-sm"> Please Input Longer and Shorter</div>
+          <div className="text-sm"> Please Input Longer and Shorter SMA Values</div>
           <div className="flex flex-row w-full space-x-10 justify-center whitespace-nowrap px-3 py-2 text-sm">
-            <input
-              type="number"
-              name="shorter"
-              value={smaParams.shorter}
-              onChange={handleSmaChange}
-              placeholder="Shorter"
-              min="11"
-              max="199"
-              className={numberInputClass}
-            />
             <input
               type="number"
               name="longer"
               value={smaParams.longer}
               onChange={handleSmaChange}
               placeholder="Longer"
-              min="11"
-              max="199"
+              min="10"
+              max="200"
+              className={numberInputClass}
+            />
+            <input
+              type="number"
+              name="shorter"
+              value={smaParams.shorter}
+              onChange={handleSmaChange}
+              placeholder="Shorter"
+              min="10"
+              max="200"
               className={numberInputClass}
             />
           </div>
@@ -135,7 +138,7 @@ export function ParameterSelectionComponent({
 
       {selectedAlgorithm === "RSI Strategy" && (
         <div>
-          <div className="text-sm"> Please Input Low and High Threshold</div>
+          <div className="text-sm"> Please Input Low/High Thresholds For RSI Values</div>
 
           <div className="flex flex-row w-full space-x-10 justify-center whitespace-nowrap px-3 py-2 text-sm">
             <input
@@ -144,8 +147,8 @@ export function ParameterSelectionComponent({
               value={rsiParams.lowThreshold}
               onChange={handleRsiChange}
               placeholder="Low Threshold"
-              min="11"
-              max="39"
+              min="10"
+              max="40"
               className={numberInputClass}
             />
             <input
@@ -154,8 +157,8 @@ export function ParameterSelectionComponent({
               value={rsiParams.highThreshold}
               onChange={handleRsiChange}
               placeholder="High Threshold"
-              min="61"
-              max="89"
+              min="60"
+              max="90"
               className={numberInputClass}
             />
           </div>
@@ -163,10 +166,12 @@ export function ParameterSelectionComponent({
       )}
 
       <DateTimePickerCustom isMainPage={isMainPage} />
-
-      <Link href="/candlestick" className="w-full">
-        <Button className={goButtonClass}>GO</Button>
-      </Link>
+      <Button
+        className={goButtonClass}
+        onClick={handleStartBacktesting}
+      >
+        Start Backtesting
+      </Button>
     </div>
   );
 }
