@@ -45,11 +45,20 @@ const geistMono = localFont({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
       <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{
+          background: "var(--background)",
+        }}
+      >
           <div className="absolute inset-4 flex flex-col">    
             <div className="min-h-0 grow flex-1">
               <ResizablePanelGroup direction="horizontal">
-                <ResizablePanel defaultSize={25}>
+                <ResizablePanel defaultSize={25} 
+                  style={{
+                    background: "var(--foreground)",
+                  }}
+                >
                   <AppSidebar />
                 </ResizablePanel>
                 <ResizableHandle />
