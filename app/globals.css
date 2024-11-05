@@ -103,3 +103,22 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.qt-blue {
+  border-color: #23365c;
+}
+
+.qt-blue-btn {
+  background-color: #23365c;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html,body,:root {
+  height: 100%;
+}

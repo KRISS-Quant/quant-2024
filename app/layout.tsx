@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
 import { AppSidebar } from "@/components/sidebar-qt"
 
 const geistSans = localFont({
@@ -41,16 +45,20 @@ const geistMono = localFont({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
       <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-        <SidebarProvider>
-          <AppSidebar />
-          <main>
-            <SidebarTrigger />
-            {children}
-          </main>
-        </SidebarProvider>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <div className="absolute inset-4 flex flex-col">    
+            <div className="min-h-0 grow flex-1">
+              <ResizablePanelGroup direction="horizontal">
+                <ResizablePanel defaultSize={25}>
+                  <AppSidebar />
+                </ResizablePanel>
+                <ResizableHandle />
+                <ResizablePanel defaultSize={75}>
+                  {children}
+                </ResizablePanel>
+              </ResizablePanelGroup>
+            </div>
+          </div>
       </body>
     </html>
   );

@@ -14,7 +14,11 @@ import {
 } from "@/components/ui/popover";
 import { TimePickerDemo } from "./time-picker-demo";
  
-export function DateTimePicker() {
+interface DatetimeProps {
+  placeholder: string;
+}
+
+export function DateTimePicker({ placeholder="Select a date and time" }: DatetimeProps) {
   const [date, setDate] = React.useState<Date>();
  
   /**
@@ -35,7 +39,7 @@ export function DateTimePicker() {
  
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className="qt-blue">
         <Button
           variant={"outline"}
           className={cn(
@@ -44,7 +48,7 @@ export function DateTimePicker() {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP HH:mm:ss") : <span>Pick a date</span>}
+          {date ? format(date, "PPP HH:mm:ss") : <span> {placeholder} </span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
