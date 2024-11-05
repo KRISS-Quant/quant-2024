@@ -39,7 +39,7 @@ export function DateTimePicker({ placeholder="Select a date and time" }: Datetim
  
   return (
     <Popover>
-      <PopoverTrigger asChild className="qt-blue">
+      <PopoverTrigger asChild className="border-secondary">
         <Button
           variant={"outline"}
           className={cn(
