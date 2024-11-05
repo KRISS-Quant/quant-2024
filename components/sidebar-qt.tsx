@@ -10,45 +10,53 @@ import {
 import { Button } from "./ui/button"
 import { DateTimePicker } from "./ui/date-time-picker"
 import { Label } from "./ui/label"
+import {
+    Sidebar,
+    SidebarContent
+  } from "@/components/ui/sidebar"
 
 const algorithms = ["SMA", "EMA", "Pair", "Bollinger", "RSI"]
 const intervals = ["1m", "5m", "15m", "30m", "1h", "4h", "1d"]
 
 export function AppSidebar() {
   return (
-    <div className="flex flex-col items-center justify-center h-full space-y-4">
-        <Label className="text-xl text-secondary">Parameters</Label>
-        
-        <Select>
-        <SelectTrigger className="w-[280px] border border-secondary">
-            <SelectValue placeholder="Select Algorithm" />
-        </SelectTrigger>
-        <SelectContent align='end'>
-            {algorithms.map((algorithm) => (
-            <SelectItem key={algorithm} value={algorithm}>
-                {algorithm}
-            </SelectItem>
-            ))}
-        </SelectContent>
-        </Select>
-        
-        <Select>
-        <SelectTrigger className="w-[280px] border-secondary">
-            <SelectValue placeholder="Select Time Interval" />
-        </SelectTrigger>
-        <SelectContent align='end'>
-            {intervals.map((interval) => (
-            <SelectItem key={interval} value={interval}>
-                {interval}
-            </SelectItem>
-            ))}
-        </SelectContent>
-        </Select>
-        
-        <DateTimePicker placeholder="From time" />
-        <DateTimePicker placeholder="To time" />
-        
-        <Button className="w-[280px] bg-btn-secondary">GO</Button>
-    </div>
+    <Sidebar>
+      <SidebarContent>
+            <div className="flex flex-col items-center justify-center h-full space-y-4">
+                <Label className="text-xl text-secondary">Parameters</Label>
+                
+                <Select>
+                <SelectTrigger className="w-[280px] border border-secondary">
+                    <SelectValue placeholder="Select Algorithm" />
+                </SelectTrigger>
+                <SelectContent align='end'>
+                    {algorithms.map((algorithm) => (
+                    <SelectItem key={algorithm} value={algorithm}>
+                        {algorithm}
+                    </SelectItem>
+                    ))}
+                </SelectContent>
+                </Select>
+                
+                <Select>
+                <SelectTrigger className="w-[280px] border-secondary">
+                    <SelectValue placeholder="Select Time Interval" />
+                </SelectTrigger>
+                <SelectContent align='end'>
+                    {intervals.map((interval) => (
+                    <SelectItem key={interval} value={interval}>
+                        {interval}
+                    </SelectItem>
+                    ))}
+                </SelectContent>
+                </Select>
+                
+                <DateTimePicker placeholder="From time" />
+                <DateTimePicker placeholder="To time" />
+                
+                <Button className="w-[280px] bg-btn-secondary">GO</Button>
+            </div>
+      </SidebarContent>
+    </Sidebar>
   )
 }
