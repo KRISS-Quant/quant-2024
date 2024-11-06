@@ -1,4 +1,4 @@
-'use client'
+"use client";
 // types.ts
 interface Node {
   x: number;
@@ -55,13 +55,16 @@ class UnionFind {
 }
 
 // ParticleGraph.tsx
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 const ParticleGraph: React.FC = () => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const mousePosition = useRef<{ x: number; y: number }>({ x: -1000, y: -1000 });
+  const mousePosition = useRef<{ x: number; y: number }>({
+    x: -1000,
+    y: -1000,
+  });
 
   // Configuration constants
   const REPULSION_RADIUS = 100;
@@ -79,8 +82,12 @@ const ParticleGraph: React.FC = () => {
 
   // Initialize nodes and edges
   useEffect(() => {
-    const width = typeof window !== 'undefined' ? window.innerWidth : 1000;
-    const height = typeof window !== 'undefined' ? window.innerHeight : 800;
+    const width = containerRef.current
+      ? containerRef.current.offsetWidth
+      : 1000;
+    const height = containerRef.current
+      ? containerRef.current.offsetHeight
+      : 800;
 
     // Create nodes
     const newNodes: Node[] = Array.from({ length: NUMBER_OF_NODES }, () => ({
@@ -101,7 +108,7 @@ const ParticleGraph: React.FC = () => {
       for (let j = i + 1; j < NUMBER_OF_NODES; j++) {
         const distance = Math.sqrt(
           Math.pow(newNodes[i].x - newNodes[j].x, 2) +
-          Math.pow(newNodes[i].y - newNodes[j].y, 2)
+            Math.pow(newNodes[i].y - newNodes[j].y, 2)
         );
         allPossibleEdges.push({ from: i, to: j, weight: distance });
       }
@@ -121,8 +128,8 @@ const ParticleGraph: React.FC = () => {
 
       if (unionFind.union(edge.from, edge.to)) {
         newEdges.push({ from: edge.from, to: edge.to });
-        remainingEdges = remainingEdges.filter(e =>
-          !(e.from === edge.from && e.to === edge.to)
+        remainingEdges = remainingEdges.filter(
+          (e) => !(e.from === edge.from && e.to === edge.to)
         );
       }
     }
@@ -135,7 +142,7 @@ const ParticleGraph: React.FC = () => {
       // Check if this edge would create a good visual connection
       const distance = Math.sqrt(
         Math.pow(newNodes[edge.from].x - newNodes[edge.to].x, 2) +
-        Math.pow(newNodes[edge.from].y - newNodes[edge.to].y, 2)
+          Math.pow(newNodes[edge.from].y - newNodes[edge.to].y, 2)
       );
 
       // Only add edges that aren't too long
@@ -171,12 +178,12 @@ const ParticleGraph: React.FC = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseleave', handleMouseLeave);
+    container.addEventListener("mousemove", handleMouseMove);
+    container.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseleave', handleMouseLeave);
+      container.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
 
@@ -200,7 +207,7 @@ const ParticleGraph: React.FC = () => {
           let newDirection = node.direction;
 
           // Update angle based on current direction
-          const newAngle = node.angle + (node.speed * deltaTime * newDirection);
+          const newAngle = node.angle + node.speed * deltaTime * newDirection;
 
           // Add gentle circular motion
           vx += Math.cos(newAngle) * node.radius * CIRCULAR_MOTION_STRENGTH;
@@ -212,15 +219,17 @@ const ParticleGraph: React.FC = () => {
           const distanceToMouse = Math.sqrt(dx * dx + dy * dy);
 
           if (distanceToMouse < REPULSION_RADIUS) {
-            const force = (REPULSION_RADIUS - distanceToMouse) / REPULSION_RADIUS;
+            const force =
+              (REPULSION_RADIUS - distanceToMouse) / REPULSION_RADIUS;
             vx += (dx / distanceToMouse) * force * REPULSION_STRENGTH;
             vy += (dy / distanceToMouse) * force * REPULSION_STRENGTH;
           }
 
           // Edge forces
-          edges.forEach(edge => {
+          edges.forEach((edge) => {
             if (edge.from === nodeIndex || edge.to === nodeIndex) {
-              const otherNodeIndex = edge.from === nodeIndex ? edge.to : edge.from;
+              const otherNodeIndex =
+                edge.from === nodeIndex ? edge.to : edge.from;
               const otherNode = prevNodes[otherNodeIndex];
               const edgeDx = otherNode.x - node.x;
               const edgeDy = otherNode.y - node.y;
@@ -244,19 +253,27 @@ const ParticleGraph: React.FC = () => {
 
           // Apply wall repulsion
           if (distanceToLeftWall < WALL_REPULSION_DISTANCE) {
-            const force = (1 - distanceToLeftWall / WALL_REPULSION_DISTANCE) * WALL_REPULSION_FORCE;
+            const force =
+              (1 - distanceToLeftWall / WALL_REPULSION_DISTANCE) *
+              WALL_REPULSION_FORCE;
             vx += force;
           }
           if (distanceToRightWall < WALL_REPULSION_DISTANCE) {
-            const force = (1 - distanceToRightWall / WALL_REPULSION_DISTANCE) * WALL_REPULSION_FORCE;
+            const force =
+              (1 - distanceToRightWall / WALL_REPULSION_DISTANCE) *
+              WALL_REPULSION_FORCE;
             vx -= force;
           }
           if (distanceToTopWall < WALL_REPULSION_DISTANCE) {
-            const force = (1 - distanceToTopWall / WALL_REPULSION_DISTANCE) * WALL_REPULSION_FORCE;
+            const force =
+              (1 - distanceToTopWall / WALL_REPULSION_DISTANCE) *
+              WALL_REPULSION_FORCE;
             vy += force;
           }
           if (distanceToBottomWall < WALL_REPULSION_DISTANCE) {
-            const force = (1 - distanceToBottomWall / WALL_REPULSION_DISTANCE) * WALL_REPULSION_FORCE;
+            const force =
+              (1 - distanceToBottomWall / WALL_REPULSION_DISTANCE) *
+              WALL_REPULSION_FORCE;
             vy -= force;
           }
 
@@ -302,7 +319,7 @@ const ParticleGraph: React.FC = () => {
             speed: node.speed,
             radius: node.radius,
             direction: newDirection,
-            lastBounceTime: node.lastBounceTime
+            lastBounceTime: node.lastBounceTime,
           };
         });
       });
@@ -319,11 +336,7 @@ const ParticleGraph: React.FC = () => {
   }, [edges]);
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 w-full h-full overflow-hidden"
-      style={{ background: 'var(--background)' }}
-    >
+    <div ref={containerRef} className="w-full h-full overflow-hidden">
       <svg className="w-full h-full">
         {edges.map((edge, index) => {
           const fromNode = nodes[edge.from];
