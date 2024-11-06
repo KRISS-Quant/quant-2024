@@ -26,6 +26,9 @@ const config: Config = {
         primary: "var(--border-primary)",
         secondary: "var(--border-secondary)",
       },
+      fontFamily: {
+        jomolhari: ['Jomolhari', 'serif'],
+      }
     },
   },
   plugins: [],
