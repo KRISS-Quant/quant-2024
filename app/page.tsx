@@ -2,17 +2,12 @@ import ParticleGraph from "@/components/ParticleGraph";
 
 export default function Home() {
   return (
-    <div
-      className="flex h-screen"
-      style={{
-        color: "var(--text-base)",
-      }}
-    >
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 w-full p-8">
+    <div className="flex h-screen">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 w-full p-8 font-jomolhari">
         <div className="flex flex-col items-center justify-center md:items-center md:justify-center md:col-span-5">
-          <h1 className="text-6xl font-bold">KRISS QUANT</h1>
-          <h1 className="text-6xl font-bold mb-5">BackTesting</h1>
-          <h3 className="text-xl text-center md:text-left mb-5">
+          <h1 className="text-6xl font-bold mb-1">KRISS QUANT</h1>
+          <h1 className="text-6xl font-bold mb-8">BackTesting</h1>
+          <h3 className="text-xl text-center md:text-left mb-8">
             View predictive model of real-time stock chart
           </h3>
           {/* Put parameter selection component below */}
