@@ -69,7 +69,7 @@ const ParticleGraph: React.FC = () => {
   // Configuration constants
   const REPULSION_RADIUS = 100;
   const REPULSION_STRENGTH = 0.5;
-  const NUMBER_OF_NODES = 60;
+  const NUMBER_OF_NODES = 50;
   const BASE_SPEED = 0.2;
   const MOUSE_INFLUENCE_DECAY = 0.95;
   const WALL_BOUNCE_DAMPENING = 0.8;
@@ -108,7 +108,7 @@ const ParticleGraph: React.FC = () => {
       for (let j = i + 1; j < NUMBER_OF_NODES; j++) {
         const distance = Math.sqrt(
           Math.pow(newNodes[i].x - newNodes[j].x, 2) +
-            Math.pow(newNodes[i].y - newNodes[j].y, 2)
+          Math.pow(newNodes[i].y - newNodes[j].y, 2)
         );
         allPossibleEdges.push({ from: i, to: j, weight: distance });
       }
@@ -142,7 +142,7 @@ const ParticleGraph: React.FC = () => {
       // Check if this edge would create a good visual connection
       const distance = Math.sqrt(
         Math.pow(newNodes[edge.from].x - newNodes[edge.to].x, 2) +
-          Math.pow(newNodes[edge.from].y - newNodes[edge.to].y, 2)
+        Math.pow(newNodes[edge.from].y - newNodes[edge.to].y, 2)
       );
 
       // Only add edges that aren't too long
@@ -197,8 +197,12 @@ const ParticleGraph: React.FC = () => {
       lastTime = currentTime;
 
       setNodes((prevNodes): Node[] => {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        const width = containerRef.current
+          ? containerRef.current.offsetWidth
+          : 1000;
+        const height = containerRef.current
+          ? containerRef.current.offsetHeight
+          : 800;
         const padding = 50;
 
         return prevNodes.map((node, nodeIndex): Node => {
