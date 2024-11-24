@@ -86,7 +86,7 @@ const CandlestickChart: React.FC = () => {
       type: "datetime",
       labels: {
         style: {
-          colors: "var(--text-grey)", // Set x-axis label color
+          colors: "var(--text-base)", // Set x-axis label color
         },
       },
       axisBorder: {
@@ -98,7 +98,7 @@ const CandlestickChart: React.FC = () => {
       tickAmount: 10, // Set the number of ticks on the y-axis
       labels: {
         style: {
-          colors: "var(--text-grey)", // Set y-axis label color
+          colors: "var(--text-base)", // Set y-axis label color
         },
       },
     },
@@ -120,6 +120,34 @@ const CandlestickChart: React.FC = () => {
         lines: {
           show: true, // Show x-axis grid lines
         },
+      },
+    },
+    tooltip: {
+      theme: "dark", // Dark theme for tooltip
+      style: {
+        fontSize: '12px',
+        fontFamily: undefined,
+      },
+      x: {
+        show: true,
+        format: 'dd MMM',
+      },
+      y: {
+        title: {
+          formatter: (seriesName) => seriesName,
+        },
+      },
+      marker: {
+        show: true,
+      },
+      items: {
+        display: "flex",
+      },
+      fixed: {
+        enabled: false,
+        position: 'topRight',
+        offsetX: 0,
+        offsetY: 0,
       },
     },
   };
