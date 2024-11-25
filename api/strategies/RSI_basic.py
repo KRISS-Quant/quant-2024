@@ -1,7 +1,7 @@
 """ return indicator data frame given data """
 
 from pandas import DataFrame
-from indicators import RSI
+from .indicators import RSI
 
 def into_signal(df: DataFrame, low: float = 30, high: float = 70) -> list:
     """
@@ -21,10 +21,12 @@ def into_signal(df: DataFrame, low: float = 30, high: float = 70) -> list:
     """
     signal = []
     for i in range(1, len(df)):
-        if df.iloc[i - 1] > low and df.iloc[i] < low:
-            signal.append({"time": df.index[i], "signal": 1})
-        elif df.iloc[i - 1] < high and df.iloc[i] > high:
-            signal.append({"time": df.index[i], "signal": 0})
+        prev_value = df.iloc[i - 1]
+        curr_value = df.iloc[i]
+        if prev_value > low > curr_value:
+            signal.append({"time": int(df.index[i]), "signal": 1})
+        elif prev_value < high < curr_value:
+            signal.append({"time": int(df.index[i]), "signal": 0})
     return signal
 
 def wrapper(data: dict, parameter: dict = None) -> list:

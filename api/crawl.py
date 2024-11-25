@@ -36,7 +36,13 @@ def request_data(ticker: str = "BTCUSDT", interval: str = "15m", start: int = 0,
     """
     response = requests.get(URL_BINANCE.format(ticker, interval, start, end),
                             timeout = TIMEOUT)
-    return response.json()
+    data = response.json()
+    # timestamp conversion
+    for i, _ in enumerate(data):
+        data[i] = data[i][:7]
+        data[i][0] = data[i][0] // 1000
+        data[i][6] = data[i][6] // 1000
+    return data
 
 def request_period(ticker: str = "BTCUSDT", interval: str = "15m", start: int = 0, end: int = 0):
     """
@@ -55,5 +61,5 @@ def request_period(ticker: str = "BTCUSDT", interval: str = "15m", start: int = 
                                         start + 1000 * INTERVAL_MAP[interval])
         start += 1000 * INTERVAL_MAP[interval]
     response_concat += request_data(ticker, interval, start, end)
-    # extra processing is not needed for Binance
+
     return response_concat
