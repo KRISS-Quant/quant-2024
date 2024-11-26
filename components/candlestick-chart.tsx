@@ -76,7 +76,7 @@ const CandlestickChart: React.FC = () => {
       },
     },
     title: {
-      text: "APPLE INC. (AAPL)",
+      text: "BTC/USDT",
       align: "left",
       style: {
         color: "var(--text-base)", // Use CSS variable for text color
