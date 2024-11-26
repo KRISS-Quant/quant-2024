@@ -4,6 +4,9 @@ import "./globals.css";
 import Image from "next/image";
 import krissLogo from "@/assets/images/kriss-logo.png";
 
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/sidebar-qt";
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -33,14 +36,20 @@ export default function RootLayout({
           background: "var(--background)",
         }}
       >
-        {children}
-        <Image
-          src={krissLogo}
-          alt="Kriss Logo"
-          className="fixed bottom-4 right-4 hidden md:block"
-          width={120}
-          height={120}
-        />
+        <SidebarProvider>
+          <AppSidebar />
+          <main>
+            <SidebarTrigger />
+            {children}
+            <Image
+              src={krissLogo}
+              alt="Kriss Logo"
+              className="fixed bottom-4 right-4 hidden md:block"
+              width={120}
+              height={120}
+            />{" "}
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );

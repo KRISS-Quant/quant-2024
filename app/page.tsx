@@ -1,4 +1,5 @@
-import ParticleGraph from "@/components/ParticleGraph";
+import ParticleGraph from "@/components/particle-graph";
+import { ParameterSelectionComponent } from "@/components/parameter-selection-component";
 
 export default function Home() {
   return (
@@ -11,7 +12,7 @@ export default function Home() {
             View predictive model of real-time stock chart
           </h3>
           {/* Put parameter selection component below */}
-          <div className="w-[400px] h-[400px] border-2"></div>
+          <ParameterSelectionComponent />
         </div>
         <div className="md:flex justify-start items-start md:col-span-7">
           <ParticleGraph />
