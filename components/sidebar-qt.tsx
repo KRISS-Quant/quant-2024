@@ -1,10 +1,7 @@
-import { Label } from "./ui/label"
-import {
-    Sidebar,
-    SidebarContent
-  } from "@/components/ui/sidebar"
+import { Label } from "./ui/label";
+import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
 
-import { SidebarComponent } from "@/components/sidebar-comp"
+import { ParameterSelectionComponent } from "@/components/parameter-selection-component";
 
 export function AppSidebar() {
   return (
@@ -12,9 +9,9 @@ export function AppSidebar() {
       <SidebarContent>
         <div className="flex flex-col items-center justify-center h-full space-y-4 text-center">
           <Label className="text-xl text-secondary">Parameters</Label>
-          <SidebarComponent/>
+          <ParameterSelectionComponent />
         </div>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
