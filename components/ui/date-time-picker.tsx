@@ -40,7 +40,7 @@ export function DateTimePicker({
     const newDateFull = add(date, { days: Math.ceil(diffInDays) });
     setDate(newDateFull);
   };
-  var borderColour = isMainPage ? "border-secondary" : "border-primary";
+  var borderColour = isMainPage ? "border-primary" : "border-secondary";
 
   return (
     <Popover>

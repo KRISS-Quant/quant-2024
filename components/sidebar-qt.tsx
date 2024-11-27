@@ -9,7 +9,7 @@ export function AppSidebar() {
       <SidebarContent>
         <div className="flex flex-col items-center justify-center h-full space-y-4 text-center">
           <Label className="text-xl text-secondary">Parameters</Label>
-          <ParameterSelectionComponent isMainPage={true} />
+          <ParameterSelectionComponent />
         </div>
       </SidebarContent>
     </Sidebar>
