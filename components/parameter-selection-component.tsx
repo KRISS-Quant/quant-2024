@@ -5,8 +5,8 @@ import { SelectCustom } from "@/components/ui/select-custom";
 import { Button } from "./ui/button";
 import { DateTimePickerCustom } from "./ui/date-time-picker-custom";
 import { z } from "zod";
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const algorithms = ["SMA Golden Cross Strategy", "RSI Strategy"]; //Initial Strategies
 //const algorithms = ["SMA", "EMA", "Pair", "Bollinger", "RSI"];
@@ -58,7 +58,7 @@ export function ParameterSelectionComponent({
   // Validate the parameters before making the API call
   const validateParams = () => {
     try {
-      if (selectedAlgorithm === "SMA Golden Cross") {
+      if (selectedAlgorithm === "SMA Golden Cross Strategy") {
         SMAParamsSchema.parse(smaParams);
       } else if (selectedAlgorithm === "RSI") {
         RSIParamsSchema.parse(rsiParams);
@@ -75,13 +75,14 @@ export function ParameterSelectionComponent({
 
   // Handle rendering UI change based on the main page
   var goButtonClass =
-    "w-full bg-btn-hover hover:bg-btn-accent text-secondary hover:text-primary";
+    "w-full bg-btn-secondary hover:bg-btn-accent text-primary";
   var numberInputClass =
-    "h-7 p-4 justify-center bg-transparent border rounded-md border-primary";
+    "h-7 p-4 justify-center bg-transparent border rounded-md border-secondary";
   if (isMainPage) {
-    goButtonClass = "w-full bg-btn-secondary text-primary hover:bg-btn-accent";
+    goButtonClass =
+      "w-full bg-btn-primary text-secondary hover:bg-btn-accent hover:text-primary";
     numberInputClass =
-      "h-7 p-4 justify-center bg-transparent border rounded-md border-secondary";
+      "h-7 p-4 justify-center bg-transparent border rounded-md border-primary";
   }
 
   return (
@@ -104,7 +105,7 @@ export function ParameterSelectionComponent({
         placeholder="Select Time Interval"
         isMainPage={isMainPage}
       />
-      {selectedAlgorithm === "SMA Golden Cross" && (
+      {selectedAlgorithm === "SMA Golden Cross Strategy" && (
         <div>
           <div className="text-sm"> Please Input Longer and Shorter</div>
           <div className="flex flex-row w-full space-x-10 justify-center whitespace-nowrap px-3 py-2 text-sm">
@@ -132,7 +133,7 @@ export function ParameterSelectionComponent({
         </div>
       )}
 
-      {selectedAlgorithm === "RSI" && (
+      {selectedAlgorithm === "RSI Strategy" && (
         <div>
           <div className="text-sm"> Please Input Low and High Threshold</div>
 
@@ -163,12 +164,9 @@ export function ParameterSelectionComponent({
 
       <DateTimePickerCustom isMainPage={isMainPage} />
 
-      <Button
-        className={goButtonClass}
-        // onClick={validateParams}
-      >
-        GO
-      </Button>
+      <Link href="/candlestick" className="w-full">
+        <Button className={goButtonClass}>GO</Button>
+      </Link>
     </div>
   );
 }

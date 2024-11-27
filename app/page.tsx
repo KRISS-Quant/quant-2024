@@ -16,7 +16,7 @@ export default function Home() {
             View predictive model of real-time stock chart
           </h3>
           {/* Put parameter selection component below */}
-          <ParameterSelectionComponent />
+          <ParameterSelectionComponent isMainPage={true} />
         </div>
         <div className="md:flex justify-start items-start md:col-span-7">
           <ParticleGraph />
