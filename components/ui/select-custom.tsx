@@ -1,14 +1,13 @@
-"use client";
-
-import {
-  Select,
+"use client"
+import * as React from "react"
+import { Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
 
-interface CustomSelectProps {
+export interface CustomSelectProps {
   items: string[];
   placeholder: string;
   onChange?: (value: string) => void; // Make onChange optional
@@ -27,8 +26,8 @@ const SelectCustom: React.FC<CustomSelectProps> = ({
   }
   return (
     <Select onValueChange={onChange}>
-      <SelectTrigger className={selectTriggerClass}>
-        <SelectValue placeholder={placeholder} />
+      <SelectTrigger className="w-full border border-secondary">
+          <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent align="end">
         {items.map((item) => (

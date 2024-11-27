@@ -5,10 +5,12 @@ import { SelectCustom } from "@/components/ui/select-custom";
 import { Button } from "./ui/button";
 import { DateTimePickerCustom } from "./ui/date-time-picker-custom";
 import { z } from "zod";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-// const algorithms = ["SMA", "EMA", "Pair", "Bollinger", "RSI"];
+const algorithms = ["SMA Golden Cross Strategy", "RSI Strategy"]; //Initial Strategies
+//const algorithms = ["SMA", "EMA", "Pair", "Bollinger", "RSI"];
 const ticker = ["BTCUSDT", "ETHUSDT"];
-const algorithms = ["SMA Golden Cross", "RSI"];
 const intervals = ["1m", "5m", "15m", "30m", "1h", "4h", "1d"];
 
 // Validation schema for SMA parameters
