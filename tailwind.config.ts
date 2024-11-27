@@ -51,6 +51,7 @@ const config: Config = {
       },
       textColor: {
         base: "var(--text-base)",
+        primary: "var(--text-base)",
         secondary: "var(--text-secondary)",
       },
       backgroundColor: {

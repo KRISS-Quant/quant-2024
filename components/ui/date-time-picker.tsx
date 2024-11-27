@@ -1,9 +1,9 @@
 "use client";
- 
+
 import * as React from "react";
 import { add, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
- 
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -13,14 +13,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { TimePickerDemo } from "./time-picker-demo";
- 
+
 interface DatetimeProps {
   placeholder: string;
+  isMainPage?: boolean;
 }
 
-export function DateTimePicker({ placeholder="Select a date and time" }: DatetimeProps) {
+export function DateTimePicker({
+  placeholder = "Select a date and time",
+  isMainPage = false,
+}: DatetimeProps) {
   const [date, setDate] = React.useState<Date>();
- 
+
   /**
    * carry over the current time when a user clicks a new day
    * instead of resetting to 00:00
@@ -36,10 +40,11 @@ export function DateTimePicker({ placeholder="Select a date and time" }: Datetim
     const newDateFull = add(date, { days: Math.ceil(diffInDays) });
     setDate(newDateFull);
   };
- 
+  var borderColour = isMainPage ? "border-secondary" : "border-primary";
+
   return (
     <Popover>
-      <PopoverTrigger asChild className="border-secondary">
+      <PopoverTrigger asChild className={borderColour}>
         <Button
           variant={"outline"}
           className={cn(

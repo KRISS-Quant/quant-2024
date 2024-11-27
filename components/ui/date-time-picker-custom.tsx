@@ -1,10 +1,16 @@
 import { DateTimePicker } from "@/components/ui/date-time-picker";
 
-export function DateTimePickerCustom() {
+interface DateTimePickerCustomProps {
+  isMainPage?: boolean; // Make it optional
+}
+
+export function DateTimePickerCustom({
+  isMainPage = false,
+}: DateTimePickerCustomProps) {
   return (
     <>
-      <DateTimePicker placeholder="From time" />
-      <DateTimePicker placeholder="To time" />
+      <DateTimePicker placeholder="From Time" isMainPage={isMainPage} />
+      <DateTimePicker placeholder="To Time" isMainPage={isMainPage} />
     </>
   );
 }
