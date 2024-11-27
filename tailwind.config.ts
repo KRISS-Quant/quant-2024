@@ -51,8 +51,7 @@ const config: Config = {
       },
       textColor: {
         base: "var(--text-base)",
-        primary: "var(--text-base)",
-        secondary: "var(--text-secondary)",
+        secondary: "var(--text-secondary)"
       },
       backgroundColor: {
         "btn-primary": "var(--button-primary)",
