@@ -13,6 +13,6 @@ def get_indicator(data: list, parameter: dict = None) -> DataFrame:
     Returns:
         list: requested indicator in pd.DataFrame format.
     """
-    df = get_ohlc(data, volume = True)
+    df = get_ohlc(data, volume = False)
     indicator = TA.RSI(df) # RSI / SMA
     return indicator
