@@ -61,5 +61,4 @@ def request_period(ticker: str = "BTCUSDT", interval: str = "15m", start: int = 
                                         start + 1000 * INTERVAL_MAP[interval])
         start += 1000 * INTERVAL_MAP[interval]
     response_concat += request_data(ticker, interval, start, end)
-
     return response_concat
