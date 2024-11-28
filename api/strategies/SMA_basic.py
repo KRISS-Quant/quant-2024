@@ -41,4 +41,11 @@ def wrapper(data: dict, parameter: dict = None) -> list:
     indicator_2 = SMA.get_indicator(data["primary"], {"period": parameter["short"]})
     indicator = indicator_2 - indicator_1
     signal = into_signal(indicator, parameter["long"])
-    return signal
+    timestamp_list = indicator.index.tolist()
+    indicator_list_1 = list(map(list, zip(timestamp_list, indicator_1.tolist())))
+    indicator_list_2 = list(map(list, zip(timestamp_list, indicator_2.tolist())))
+    indicator_export = {
+        "SMA_long": indicator_list_1,
+        "SMA_short": indicator_list_2
+    }
+    return (signal, indicator_export)
