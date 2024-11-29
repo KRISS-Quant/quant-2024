@@ -15,6 +15,8 @@ import { ApexOptions } from "apexcharts";
 
 // Import Dummy data from Klines.json
 import tickerData from "../klines.json";
+import { AlignTopIcon } from "@radix-ui/react-icons";
+import { get } from "node:https";
 
 // Register Chart.js components
 ChartJS.register(
@@ -37,10 +39,47 @@ interface CandlestickChartProps {
 // Candlestick Chart Component
 const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
   const [series, setSeries] = useState<any[]>([]);
+  const [tickerData, setTickerData] = useState<any[]>([]);
+  const [candlestickData, setCandlestickData] = useState<
+    {
+      x: Date; // Open time
+      y: number[];
+    }[]
+  >([]);
 
-  const formatCandlestickData = () => {
-    return tickerData.map((item: any) => ({
-      x: new Date(item[0]), // Open time
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response =
+          algorithm === "SMA Golden Cross Strategy"
+            ? await fetch("/api/strats/sma/basic")
+            : await fetch("/api/strats/rsi/basic");
+        const data = await response.json();
+        if (data && data.ohlc_data && data.ohlc_data.primary) {
+          setTickerData(data.ohlc_data.primary);
+        } else {
+          console.error("Unexpected data structure:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [algorithm]);
+
+  useEffect(() => {
+    if (tickerData.length > 0) {
+      const formattedData = formatCandlestickData(tickerData);
+      setCandlestickData(formattedData);
+    }
+  }, [tickerData]);
+
+  const formatCandlestickData = (data: any[]) => {
+    if (!data || data.length === 0) return [];
+    console.log("formatcandlestickdatacalled");
+    return data.map((item: any) => ({
+      x: new Date(item[0]),
       y: [
         parseFloat(item[1]), // Open
         parseFloat(item[2]), // High
@@ -48,10 +87,14 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
         parseFloat(item[4]), // Close
       ],
     }));
-  }
+  };
 
   // Calculate SMA values (dummy calculation)
   const calculateSMA = (period: number) => {
+    if (!tickerData) {
+      return []; // Return an empty array if tickerData is undefined
+    }
+
     return tickerData.map((item: any, index: number) => ({
       x: new Date(item[0]),
       y: parseFloat(item[4]) + (period === 50 ? 100 : 200), // Dummy calculation
@@ -60,39 +103,57 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
 
   // Calculate RSI (dummy calculation for example)
   const calculateRSI = () => {
+    if (!tickerData) {
+      return []; // Return an empty array if tickerData is undefined
+    }
+
     return tickerData.map((item: any) => ({
       x: new Date(item[0]),
       y: Math.random() * 100, // Dummy RSI value
     }));
   };
-  
-  useEffect(() => {
-    // Format the ticker data for the candlestick chart. Below is the JSON Format.
-    // [
-    //     [
-    //       1591258320000,      	// Open time
-    //       "9640.7",       	 	// Open
-    //       "9642.4",       	 	// High
-    //       "9640.6",       	 	// Low
-    //       "9642.0",      	 	 	// Close (or latest price)
-    //       "206", 			 		// Volume
-    //       1591258379999,       	// Close time
-    //       "2.13660389",    		// Base asset volume
-    //       48,             		// Number of trades
-    //       "119",    				// Taker buy volume
-    //       "1.23424865",      		// Taker buy base asset volume
-    //       "0" 					// Ignore.
-    //     ]
-    //   ]
-    const candlestickData = formatCandlestickData();
 
+  // Fetch data from the API
+  // const fetchData = async (algorithm: string) => {
+  //   try {
+  //     const response =
+  //       algorithm === "SMA Golden Cross Strategy"
+  //         ? await fetch("/api/strats/sma/basic")
+  //         : await fetch("/api/strats/rsi/basic");
+  //     const data = await response.json();
+  //     if (data && data.ohlc_data && data.ohlc_data.primary) {
+  //       setTickerData(data.ohlc_data.primary);
+  //     } else {
+  //       console.error("Unexpected data structure:", data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (tickerData.length > 0) {
+  //     setCandlestickData(formatCandlestickData());
+  //   }
+  // }, [tickerData]);
+
+  // useEffect(() => {
+  //   fetchData(algorithm);
+  // }, [algorithm]);
+
+  useEffect(() => {
+    console.log("Ticker Data:", tickerData);
+    console.log("Candlestick Data:", candlestickData);
+  }, [tickerData, candlestickData]);
+
+  useEffect(() => {
     // Set the formatted data to the series state (Updated)
-    if (algorithm === "SMA Golden Cross Strategy") {
+    if (algorithm === "SMA Golden Cross Strategy" && tickerData.length > 0) {
       setSeries([
-        { 
-          name: "Candlestick", 
-          type: "candlestick", 
-          data: candlestickData 
+        {
+          name: "Candlestick",
+          type: "candlestick",
+          data: candlestickData,
         },
         {
           name: "SMA 50",
@@ -114,21 +175,21 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
         },
       ]);
     }
-  }, [algorithm]);
+  }, [candlestickData]);
 
   // Define the chart options
   const CandlestickOptions: ApexOptions = {
     chart: {
       type: "candlestick",
       id: "candles",
-      height: algorithm === 'RSI Strategy' ? '75%' : 350,
+      height: algorithm === "RSI Strategy" ? "75%" : 350,
       group: "charts",
       parentHeightOffset: 0,
       zoom: {
         enabled: true,
         autoScaleYaxis: true, // Automatically scales the y-axis on zoom
       },
-      foreColor: '#fff'
+      foreColor: "#fff",
     },
 
     title: {
@@ -154,8 +215,8 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
       tickAmount: 10, // Set the number of ticks on the y-axis
       labels: {
         minWidth: 75,
-        align: 'left',
-        formatter: function(val){
+        align: "left",
+        formatter: function (val) {
           return val.toFixed(1);
         },
         style: {
@@ -177,7 +238,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
     grid: {
       padding: {
         left: 10,
-        right: 10
+        right: 10,
       },
       borderColor: "rgba(128, 128, 128, 0.3)", // Set grid line color with 0.3 opacity
       strokeDashArray: 0, // Solid lines
@@ -190,12 +251,12 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
     tooltip: {
       theme: "dark", // Dark theme for tooltip
       style: {
-        fontSize: '12px',
+        fontSize: "12px",
         fontFamily: undefined,
       },
       x: {
         show: true,
-        format: 'dd MMM',
+        format: "dd MMM",
       },
       y: {
         title: {
@@ -210,23 +271,23 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
       },
       fixed: {
         enabled: false,
-        position: 'topRight',
+        position: "topRight",
         offsetX: 0,
         offsetY: 0,
       },
     },
     stroke: {
-      curve: 'smooth',
+      curve: "smooth",
       width: [2, 0.5, 0.5], // candlestick, sma_short, sma_long
-      colors: ['#000', '#FFFF00', '#00ff00'], // temporary color selections
+      colors: ["#000", "#FFFF00", "#00ff00"], // temporary color selections
     },
     legend: {
       labels: {
-        colors: 'var(--text-base)',
+        colors: "var(--text-base)",
       },
       markers: {
-        fillColors: ['#000', '#FFFF00', '#00ff00'],
-      }
+        fillColors: ["#000", "#FFFF00", "#00ff00"],
+      },
     },
   };
 
@@ -234,12 +295,12 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
     chart: {
       type: "line",
       id: "rsi",
-      height: '25%',
+      height: "25%",
       group: "charts",
       parentHeightOffset: 0,
       toolbar: {
-        autoSelected: 'pan',
-        show: false
+        autoSelected: "pan",
+        show: false,
       },
     },
     title: {
@@ -252,31 +313,34 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
       max: 100,
       labels: {
         minWidth: 75,
-        align: 'left',
-        formatter: function(val){
+        align: "left",
+        formatter: function (val) {
           return val.toFixed(0);
         },
-        style: { colors: "var(--text-base)" } },
+        style: { colors: "var(--text-base)" },
+      },
     },
     xaxis: {
       type: "datetime",
       labels: {
         style: { colors: "var(--text-base)" },
-        show: false
+        show: false,
       },
     },
     grid: {
       padding: {
         left: 10,
-        right: 10
-      }
+        right: 10,
+      },
     },
     stroke: {
-      curve: 'smooth',
+      curve: "smooth",
       width: [1], // rsi
-      colors: ['#a0aaba'], // temporary color selection
+      colors: ["#a0aaba"], // temporary color selection
     },
   };
+
+  console.log(candlestickData);
 
   return (
     // Container for the chart with border and background color
@@ -286,21 +350,26 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
         borderColor: "var(--border-primary)", // Use CSS variable for border color
       }}
     >
-      <Chart
-        options={CandlestickOptions}
-        series={series}
-        type="candlestick"
-        height={algorithm === "RSI Strategy" ? "70%" : "100%"}
-        width="100%"
-      />
-      {algorithm === "RSI Strategy" && (
+      {candlestickData.length > 0 && (
+        <Chart
+          options={CandlestickOptions}
+          series={series}
+          type="candlestick"
+          height={algorithm === "RSI Strategy" ? "70%" : "100%"}
+          width="100%"
+        />
+      )}
+
+      {algorithm === "RSI Strategy" && candlestickData.length > 0 && (
         <Chart
           options={rsiOptions}
-          series={[{
-            name: "RSI",
-            type: "line",
-            data: calculateRSI(),
-          }]}
+          series={[
+            {
+              name: "RSI",
+              type: "line",
+              data: calculateRSI(),
+            },
+          ]}
           type="line"
           height="30%"
           width="100%"
