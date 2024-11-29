@@ -3,7 +3,7 @@ import { ParameterSelectionComponent } from "@/components/parameter-selection-co
 
 export default function Home() {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen text-base">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 w-full p-8">
         <div className="flex flex-col items-center justify-center md:items-center md:justify-center md:col-span-5">
           <h1 className="text-6xl font-bold mb-1 font-jomolhari">
