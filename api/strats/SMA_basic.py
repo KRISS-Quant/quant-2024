@@ -58,5 +58,4 @@ def wrapper(data: dict, parameter: dict = None) -> list:
         "SMA_long": indicator_list_1,
         "SMA_short": indicator_list_2
     }
-
     return (signal, indicator_export)

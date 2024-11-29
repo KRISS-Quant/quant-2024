@@ -3,7 +3,6 @@
 from pandas import DataFrame
 from .indicators import RSI
 
-
 def into_signal(df: DataFrame, low: float = 30, high: float = 70) -> list:
     """
     Computes signal from data: uppermost layer
@@ -30,8 +29,7 @@ def into_signal(df: DataFrame, low: float = 30, high: float = 70) -> list:
             signal.append({"time": int(df.index[i]), "signal": 0})
     return signal
 
-
-def wrapper(data: dict, parameter: dict = None) -> list:
+def wrapper(data: dict, parameter: dict = None) -> tuple:
     """
     Computes signal from data: uppermost layer
     Args:
@@ -47,9 +45,10 @@ def wrapper(data: dict, parameter: dict = None) -> list:
     for required_key in required_keys:
         assert required_key in parameter
     indicator = RSI.get_indicator(data["primary"], parameter)
-
-    indicator = indicator.dropna()
-
     signal = into_signal(indicator, parameter["low"], parameter["high"])
-
-    return (signal, indicator)
+    timestamp_list = indicator.index.tolist()
+    indicator_list = list(map(list, zip(timestamp_list, indicator.tolist())))
+    indicator_export = {
+        "RSI": indicator_list
+    }
+    return (signal, indicator_export)
