@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Image from "next/image";
 import krissLogo from "@/assets/images/kriss-logo.png";
+import Link from "next/link";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar-qt";
@@ -41,13 +42,15 @@ export default function RootLayout({
           <main>
             <SidebarTrigger />
             {children}
-            <Image
-              src={krissLogo}
-              alt="Kriss Logo"
-              className="fixed bottom-4 right-4 hidden md:block"
-              width={120}
-              height={120}
-            />{" "}
+            <Link href="/">
+              <Image
+                src={krissLogo}
+                alt="Kriss Logo"
+                className="fixed bottom-4 right-4 hidden md:block"
+                width={120}
+                height={120}
+              />
+            </Link>
           </main>
         </SidebarProvider>
       </body>

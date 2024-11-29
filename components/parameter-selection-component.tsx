@@ -86,7 +86,10 @@ export function ParameterSelectionComponent({
   }
 
   const handleStartBacktesting = () => {
-    router.push(`/candlestick?algorithm=${encodeURIComponent(selectedAlgorithm)}`);
+    router.push(
+      `/candlestick?algorithm=${encodeURIComponent(selectedAlgorithm)}`
+    );
+    router.refresh();
   };
   return (
     <div className="flex flex-col items-center justify-center space-y-4 w-[80%] mx-auto">
@@ -110,7 +113,10 @@ export function ParameterSelectionComponent({
       />
       {selectedAlgorithm === "SMA Golden Cross Strategy" && (
         <div>
-          <div className="text-sm"> Please Input Longer and Shorter SMA Values</div>
+          <div className="text-sm">
+            {" "}
+            Please Input Longer and Shorter SMA Values
+          </div>
           <div className="flex flex-row w-full space-x-10 justify-center whitespace-nowrap px-3 py-2 text-sm">
             <input
               type="number"
@@ -138,7 +144,10 @@ export function ParameterSelectionComponent({
 
       {selectedAlgorithm === "RSI Strategy" && (
         <div>
-          <div className="text-sm"> Please Input Low/High Thresholds For RSI Values</div>
+          <div className="text-sm">
+            {" "}
+            Please Input Low/High Thresholds For RSI Values
+          </div>
 
           <div className="flex flex-row w-full space-x-10 justify-center whitespace-nowrap px-3 py-2 text-sm">
             <input
@@ -166,10 +175,7 @@ export function ParameterSelectionComponent({
       )}
 
       <DateTimePickerCustom isMainPage={isMainPage} />
-      <Button
-        className={goButtonClass}
-        onClick={handleStartBacktesting}
-      >
+      <Button className={goButtonClass} onClick={handleStartBacktesting}>
         Start Backtesting
       </Button>
     </div>
