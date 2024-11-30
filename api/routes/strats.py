@@ -1,13 +1,22 @@
 from fastapi import APIRouter, HTTPException
 from ..strats.RSI_basic import wrapper as rsi_wrapper
 from ..strats.SMA_basic import wrapper as sma_wrapper
+from ..crawl import request_period
 import json
 from pathlib import Path
+from pydantic import BaseModel
 
 # Get the project root directory
 ROOT_DIR = Path(__file__).parent.parent.parent  # This will go up from routes/strats.py to the root
 KLINES_PATH = ROOT_DIR / "klines.json"
 
+class AlgorithmInput(BaseModel):
+    algorithm: str
+    ticker: dict
+    start_time: int
+    end_time: int
+    interval: str
+    parameter: dict
 
 def load_klines():
     try:
@@ -31,29 +40,42 @@ router = APIRouter(
 )
 
 
-@router.get("/sma/basic")
-def sma_basic():
-    data = {"primary": load_klines()}
+@router.post("/sma/basic")
+async def sma_basic(data: AlgorithmInput):
+    ticker = data["ticker"]["primary"]
+    time_start = data["start_time"]
+    time_end = data["end_time"]
+    interval = data["interval"]
 
-    signal, indicator_export = sma_wrapper(data, {"long": 20, "short": 10})
-
+    ohlc_data = request_period(ticker, interval, time_start, time_end)
+    ticker_data = {
+        "primary": ohlc_data
+    }
+    parameter = data["parameter"]
+    signal, indicators = sma_wrapper(ticker_data, parameter)
     return {
-        "algorithm": "RSI_basic",
-        "ohlc_data": {"primary": data},
-        "indicators": indicator_export,
+        "algorithm": data["algorithm"],
+        "ohlc_data": ticker_data,
+        "indicators": indicators,
         "signal": signal
     }
 
+@router.post("/rsi/basic")
+async def rsi_basic(data: AlgorithmInput):
+    ticker = data["ticker"]["primary"]
+    time_start = data["start_time"]
+    time_end = data["end_time"]
+    interval = data["interval"]
 
-@router.get("/rsi/basic")
-def rsi_basic():
-    data = {"primary": load_klines()}
-
-    signal, indicator_export = rsi_wrapper(data, {"low": 30, "high": 70})
-
+    ohlc_data = request_period(ticker, interval, time_start, time_end)
+    ticker_data = {
+        "primary": ohlc_data
+    }
+    parameter = data["parameter"]
+    signal, indicators = rsi_wrapper(ticker_data, parameter)
     return {
-        "algorithm": "RSI_basic",
-        "ohlc_data": {"primary": data},
-        "indicator": indicator_export,
+        "algorithm": data["algorithm"],
+        "ohlc_data": ticker_data,
+        "indicators": indicators,
         "signal": signal
     }
