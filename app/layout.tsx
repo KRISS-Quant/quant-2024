@@ -3,6 +3,10 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Image from "next/image";
 import krissLogo from "@/assets/images/kriss-logo.png";
+import Link from "next/link";
+
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/sidebar-qt";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,14 +37,22 @@ export default function RootLayout({
           background: "var(--background)",
         }}
       >
-        {children}
-        <Image
-          src={krissLogo}
-          alt="Kriss Logo"
-          className="fixed bottom-4 right-4 hidden md:block"
-          width={120}
-          height={120}
-        />
+        <SidebarProvider>
+          <AppSidebar />
+          <main>
+            <SidebarTrigger />
+            {children}
+            <Link href="/">
+              <Image
+                src={krissLogo}
+                alt="Kriss Logo"
+                className="fixed bottom-4 right-4 hidden md:block"
+                width={120}
+                height={120}
+              />
+            </Link>
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );
