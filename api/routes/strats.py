@@ -40,14 +40,21 @@ router = APIRouter(
 )
 
 
-@router.post("/sma/basic")
-async def sma_basic(data: AlgorithmInput):
-    ticker = data["ticker"]["primary"]
-    time_start = data["start_time"]
-    time_end = data["end_time"]
-    interval = data["interval"]
-
-    ohlc_data = request_period(ticker, interval, time_start, time_end)
+@router.get("/sma/basic")
+async def sma_basic(): #data: AlgorithmInput):
+    # ticker = data["ticker"]["primary"]
+    # time_start = data["start_time"]
+    # time_end = data["end_time"]
+    # interval = data["interval"]
+    # ohlc_data = request_period(ticker, interval, time_start, time_end)
+    data = {
+        "algorithm": "SMA Golden Cross Strategy",
+        "parameter": {
+            "long": 20,
+            "short": 10
+        }
+    }
+    ohlc_data = load_klines()
     ticker_data = {
         "primary": ohlc_data
     }
@@ -60,14 +67,21 @@ async def sma_basic(data: AlgorithmInput):
         "signal": signal
     }
 
-@router.post("/rsi/basic")
-async def rsi_basic(data: AlgorithmInput):
-    ticker = data["ticker"]["primary"]
-    time_start = data["start_time"]
-    time_end = data["end_time"]
-    interval = data["interval"]
-
-    ohlc_data = request_period(ticker, interval, time_start, time_end)
+@router.get("/rsi/basic")
+async def rsi_basic(): #data: AlgorithmInput):
+    # ticker = data["ticker"]["primary"]
+    # time_start = data["start_time"]
+    # time_end = data["end_time"]
+    # interval = data["interval"]
+    # ohlc_data = request_period(ticker, interval, time_start, time_end)
+    data = {
+        "algorithm": "RSI Strategy",
+        "parameter": {
+            "high": 70,
+            "low": 30
+        }
+    }
+    ohlc_data = load_klines()
     ticker_data = {
         "primary": ohlc_data
     }
@@ -78,4 +92,4 @@ async def rsi_basic(data: AlgorithmInput):
         "ohlc_data": ticker_data,
         "indicators": indicators,
         "signal": signal
-    }
+        }
