@@ -40,6 +40,7 @@ interface CandlestickChartProps {
 const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
   const [series, setSeries] = useState<any[]>([]);
   const [tickerData, setTickerData] = useState<any[]>([]);
+  const [indicators, setIndicators] = useState<any[]>([]);
   const [candlestickData, setCandlestickData] = useState<
     {
       x: Date; // Open time
@@ -57,6 +58,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
         const data = await response.json();
         if (data && data.ohlc_data && data.ohlc_data.primary) {
           setTickerData(data.ohlc_data.primary);
+          setIndicators(data.indicators);
         } else {
           console.error("Unexpected data structure:", data);
         }
@@ -77,7 +79,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
 
   const formatCandlestickData = (data: any[]) => {
     if (!data || data.length === 0) return [];
-    console.log("formatcandlestickdatacalled");
+    // console.log("formatcandlestickdatacalled");
     return data.map((item: any) => ({
       x: new Date(item[0]),
       y: [
@@ -86,30 +88,6 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
         parseFloat(item[3]), // Low
         parseFloat(item[4]), // Close
       ],
-    }));
-  };
-
-  // Calculate SMA values (dummy calculation)
-  const calculateSMA = (period: number) => {
-    if (!tickerData) {
-      return []; // Return an empty array if tickerData is undefined
-    }
-
-    return tickerData.map((item: any, index: number) => ({
-      x: new Date(item[0]),
-      y: parseFloat(item[4]) + (period === 50 ? 100 : 200), // Dummy calculation
-    }));
-  };
-
-  // Calculate RSI (dummy calculation for example)
-  const calculateRSI = () => {
-    if (!tickerData) {
-      return []; // Return an empty array if tickerData is undefined
-    }
-
-    return tickerData.map((item: any) => ({
-      x: new Date(item[0]),
-      y: Math.random() * 100, // Dummy RSI value
     }));
   };
 
@@ -142,39 +120,32 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
   // }, [algorithm]);
 
   useEffect(() => {
-    console.log("Ticker Data:", tickerData);
-    console.log("Candlestick Data:", candlestickData);
+    // console.log("Ticker Data:", tickerData);
+    // console.log("Candlestick Data:", candlestickData);
   }, [tickerData, candlestickData]);
 
   useEffect(() => {
     // Set the formatted data to the series state (Updated)
-    if (algorithm === "SMA Golden Cross Strategy" && tickerData.length > 0) {
-      setSeries([
-        {
-          name: "Candlestick",
-          type: "candlestick",
-          data: candlestickData,
-        },
-        {
-          name: "SMA 50",
+    let chart_series = [
+      {
+        name: "Candlestick",
+        type: "candlestick",
+        data: candlestickData,
+      }
+    ]
+    if (algorithm === "SMA Golden Cross Strategy") {
+      for (const [name, timeseries] of Object.entries(indicators)) {
+        chart_series.push({
+          name: name,
           type: "line",
-          data: calculateSMA(50),
-        },
-        {
-          name: "SMA 200",
-          type: "line",
-          data: calculateSMA(200),
-        },
-      ]);
-    } else if (algorithm === "RSI Strategy") {
-      setSeries([
-        {
-          name: "Candlestick",
-          type: "candlestick",
-          data: candlestickData,
-        },
-      ]);
+          data: timeseries.map((item: any, index: number) => ({
+            x: new Date(item[0]),
+            y: item[1], // Dummy calculation
+          })),
+        });
+      }
     }
+    setSeries(chart_series);
   }, [candlestickData]);
 
   // Define the chart options
@@ -340,7 +311,7 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
     },
   };
 
-  console.log(candlestickData);
+  // console.log(candlestickData);
 
   return (
     // Container for the chart with border and background color
@@ -367,7 +338,10 @@ const CandlestickChart: React.FC<CandlestickChartProps> = ({ algorithm }) => {
             {
               name: "RSI",
               type: "line",
-              data: calculateRSI(),
+              data: indicators.RSI.map((item: any, index: number) => ({
+                x: new Date(item[0]),
+                y: item[1], // Dummy calculation
+              })),
             },
           ]}
           type="line"
