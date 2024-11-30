@@ -47,7 +47,9 @@ def wrapper(data: dict, parameter: dict = None) -> tuple:
     for required_key in required_keys:
         assert required_key in parameter
     indicator = RSI.get_indicator(data["primary"], parameter)
+
     indicator = indicator.dropna()
+
     signal = into_signal(indicator, parameter["low"], parameter["high"])
     timestamp_list = indicator.index.tolist()
     indicator_list = list(map(list, zip(timestamp_list, indicator.tolist())))
